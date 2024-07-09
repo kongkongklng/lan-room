@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 public class LoginFrame extends JFrame {
     private JTextField serverAddressField;
+    private JTextField portField;
     private JTextField usernameField;
 
     public LoginFrame() {
@@ -16,11 +17,15 @@ public class LoginFrame extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2));
+        panel.setLayout(new GridLayout(4, 2));
 
         panel.add(new JLabel("Server Address:"));
         serverAddressField = new JTextField("localhost");
         panel.add(serverAddressField);
+
+        panel.add(new JLabel("Port:"));
+        portField = new JTextField("12345");
+        panel.add(portField);
 
         panel.add(new JLabel("Username:"));
         usernameField = new JTextField();
@@ -33,8 +38,9 @@ public class LoginFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String serverAddress = serverAddressField.getText();
+                int port = Integer.parseInt(portField.getText());
                 String username = usernameField.getText();
-                ChatClient client = new ChatClient(serverAddress, 12345);
+                ChatClient client = new ChatClient(serverAddress, port);
                 if (client.connect()) {
                     ChatFrame chatFrame = new ChatFrame(client, username);
                     chatFrame.setVisible(true);

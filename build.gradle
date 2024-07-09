@@ -15,7 +15,7 @@ dependencies {
 }
 
 application {
-    mainClassName = 'com.lanroom.ChatServer'
+    mainClassName = 'com.lanroom.ServerFrame'
 }
 
 test {
