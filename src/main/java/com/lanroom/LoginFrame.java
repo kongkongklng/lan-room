@@ -42,6 +42,7 @@ public class LoginFrame extends JFrame {
                 String username = usernameField.getText();
                 ChatClient client = new ChatClient(serverAddress, port);
                 if (client.connect()) {
+                    client.sendMessage(username); // Send username to server as first message
                     ChatFrame chatFrame = new ChatFrame(client, username);
                     chatFrame.setVisible(true);
                     setVisible(false);

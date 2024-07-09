@@ -2,17 +2,19 @@ package com.lanroom;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.ServerSocket;
+import java.util.Set;
+import java.util.HashSet;
 
 public class ServerFrame extends JFrame {
     private JTextField portField;
     private JTextArea logArea;
+    private JComboBox<String> userComboBox;
+    private JButton kickButton;
 
     public ServerFrame() {
         setTitle("Server");
-        setSize(400, 300);
+        setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -41,6 +43,18 @@ public class ServerFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(logArea);
         panel.add(scrollPane, BorderLayout.CENTER);
 
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new FlowLayout());
+
+        userComboBox = new JComboBox<>();
+        bottomPanel.add(userComboBox);
+
+        kickButton = new JButton("Kick User");
+        kickButton.addActionListener(e -> kickUser());
+        bottomPanel.add(kickButton);
+
+        panel.add(bottomPanel, BorderLayout.SOUTH);
+
         JButton startButton = new JButton("Start Server");
         startButton.addActionListener(e -> startServer());
         panel.add(startButton, BorderLayout.SOUTH);
@@ -50,7 +64,16 @@ public class ServerFrame extends JFrame {
 
     private void startServer() {
         int port = Integer.parseInt(portField.getText());
-        new Thread(() -> ChatServer.startServer(port, logArea)).start();
+        new Thread(() -> ChatServer.startServer(port, logArea, userComboBox)).start();
+    }
+
+    private void kickUser() {
+        String selectedUser = (String) userComboBox.getSelectedItem();
+        if (selectedUser != null) {
+            ChatServer.kickUser(selectedUser);
+            logArea.append("Kicked user: " + selectedUser + "\n");
+            userComboBox.removeItem(selectedUser);
+        }
     }
 
     public static void main(String[] args) {
